@@ -30,7 +30,7 @@ var (
 
 const (
 	// GroupName is the group name use in this package.
-	GroupName = "kubeflow.org"
+	GroupName = "azureml.microsoft.com"
 	// Kind is the kind name.
 	Kind = "PyTorchJob"
 	// GroupVersion is the version.
@@ -40,7 +40,7 @@ const (
 	// Singular is the singular for pytorchJob.
 	Singular = "pytorchjob"
 	// PytorchCRD is the CRD name for PytorchJob.
-	PytorchCRD = "pytorchjobs.kubeflow.org"
+	PytorchCRD = "pytorchjobs.azureml.microsoft.com"
 )
 
 var (

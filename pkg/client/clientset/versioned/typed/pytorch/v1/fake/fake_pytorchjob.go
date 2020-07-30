@@ -28,13 +28,13 @@ import (
 
 // FakePyTorchJobs implements PyTorchJobInterface
 type FakePyTorchJobs struct {
-	Fake *FakeKubeflowV1
+	Fake *FakeAzuremlV1
 	ns   string
 }
 
-var pytorchjobsResource = schema.GroupVersionResource{Group: "kubeflow.org", Version: "v1", Resource: "pytorchjobs"}
+var pytorchjobsResource = schema.GroupVersionResource{Group: "azureml.microsoft.com", Version: "v1", Resource: "pytorchjobs"}
 
-var pytorchjobsKind = schema.GroupVersionKind{Group: "kubeflow.org", Version: "v1", Kind: "PyTorchJob"}
+var pytorchjobsKind = schema.GroupVersionKind{Group: "azureml.microsoft.com", Version: "v1", Kind: "PyTorchJob"}
 
 // Get takes name of the pyTorchJob, and returns the corresponding pyTorchJob object, and an error if there is any.
 func (c *FakePyTorchJobs) Get(name string, options v1.GetOptions) (result *pytorchv1.PyTorchJob, err error) {

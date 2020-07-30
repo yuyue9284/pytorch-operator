@@ -54,7 +54,7 @@ type pyTorchJobs struct {
 }
 
 // newPyTorchJobs returns a PyTorchJobs
-func newPyTorchJobs(c *KubeflowV1Client, namespace string) *pyTorchJobs {
+func newPyTorchJobs(c *AzuremlV1Client, namespace string) *pyTorchJobs {
 	return &pyTorchJobs{
 		client: c.RESTClient(),
 		ns:     namespace,

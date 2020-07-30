@@ -56,7 +56,7 @@ func NewUnstructuredPyTorchJobInformer(restConfig *restclientset.Config, namespa
 
 // NewPyTorchJobInformer returns PyTorchJobInformer from the given factory.
 func (pc *PyTorchController) NewPyTorchJobInformer(jobInformerFactory jobinformers.SharedInformerFactory) jobinformersv1.PyTorchJobInformer {
-	return jobInformerFactory.Kubeflow().V1().PyTorchJobs()
+	return jobInformerFactory.Azureml().V1().PyTorchJobs()
 }
 
 func (pc *PyTorchController) getPyTorchJobFromName(namespace, name string) (*pyv1.PyTorchJob, error) {

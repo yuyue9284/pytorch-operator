@@ -20,12 +20,12 @@ import (
 	"fmt"
 	"time"
 
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 
-	pyv1 "github.com/kubeflow/pytorch-operator/pkg/apis/pytorch/v1"
 	common "github.com/kubeflow/common/job_controller/api/v1"
+	pyv1 "github.com/kubeflow/pytorch-operator/pkg/apis/pytorch/v1"
 	pylogger "github.com/kubeflow/tf-operator/pkg/logger"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
@@ -147,7 +147,7 @@ func (pc *PyTorchController) updateStatusSingle(job *pyv1.PyTorchJob, rtype pyv1
 
 // updatePyTorchJobStatus updates the status of the given PyTorchJob.
 func (pc *PyTorchController) updatePyTorchJobStatus(job *pyv1.PyTorchJob) error {
-	_, err := pc.jobClientSet.KubeflowV1().PyTorchJobs(job.Namespace).UpdateStatus(job)
+	_, err := pc.jobClientSet.AzuremlV1().PyTorchJobs(job.Namespace).UpdateStatus(job)
 	return err
 }
 

@@ -24,7 +24,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	log "github.com/sirupsen/logrus"
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/uuid"
@@ -146,7 +146,7 @@ func Run(opt *options.ServerOption) error {
 	rl := &resourcelock.EndpointsLock{
 		EndpointsMeta: metav1.ObjectMeta{
 			Namespace: namespace,
-			Name:      "pytorch-operator",
+			Name:      "aml-pytorch-operator",
 		},
 		Client: leaderElectionClientSet.CoreV1(),
 		LockConfig: resourcelock.ResourceLockConfig{
@@ -199,7 +199,7 @@ func createClientSets(config *restclientset.Config) (kubeclientset.Interface, ku
 }
 
 func checkCRDExists(clientset jobclientset.Interface, namespace string) bool {
-	_, err := clientset.KubeflowV1().PyTorchJobs(namespace).List(metav1.ListOptions{})
+	_, err := clientset.AzuremlV1().PyTorchJobs(namespace).List(metav1.ListOptions{})
 
 	if err != nil {
 		log.Error(err)

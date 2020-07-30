@@ -170,9 +170,9 @@ type SharedInformerFactory interface {
 	ForResource(resource schema.GroupVersionResource) (GenericInformer, error)
 	WaitForCacheSync(stopCh <-chan struct{}) map[reflect.Type]bool
 
-	Kubeflow() pytorch.Interface
+	Azureml() pytorch.Interface
 }
 
-func (f *sharedInformerFactory) Kubeflow() pytorch.Interface {
+func (f *sharedInformerFactory) Azureml() pytorch.Interface {
 	return pytorch.New(f, f.namespace, f.tweakListOptions)
 }

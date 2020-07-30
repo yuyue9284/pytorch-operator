@@ -59,13 +59,13 @@ func NewFilteredPyTorchJobInformer(client versioned.Interface, namespace string,
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.KubeflowV1().PyTorchJobs(namespace).List(options)
+				return client.AzuremlV1().PyTorchJobs(namespace).List(options)
 			},
 			WatchFunc: func(options metav1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.KubeflowV1().PyTorchJobs(namespace).Watch(options)
+				return client.AzuremlV1().PyTorchJobs(namespace).Watch(options)
 			},
 		},
 		&pytorchv1.PyTorchJob{},
