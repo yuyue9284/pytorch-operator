@@ -18,14 +18,14 @@ import (
 	"strings"
 	"testing"
 
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
-	"k8s.io/client-go/tools/cache"
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/client-go/tools/cache"
 
-	pyv1 "github.com/kubeflow/pytorch-operator/pkg/apis/pytorch/v1"
 	common "github.com/kubeflow/common/job_controller/api/v1"
+	pyv1 "github.com/kubeflow/pytorch-operator/pkg/apis/pytorch/v1"
 )
 
 const (
@@ -54,7 +54,7 @@ func GenLabels(jobName string) map[string]string {
 	}
 }
 
-func GenOwnerReference(job *pyv1.PyTorchJob) *metav1.OwnerReference {
+func GenOwnerReference(job *pyv1.AmlPyTorchJob) *metav1.OwnerReference {
 	boolPtr := func(b bool) *bool { return &b }
 	controllerRef := &metav1.OwnerReference{
 		APIVersion:         pyv1.SchemeGroupVersion.String(),
@@ -69,17 +69,17 @@ func GenOwnerReference(job *pyv1.PyTorchJob) *metav1.OwnerReference {
 }
 
 // ConvertPyTorchJobToUnstructured uses function ToUnstructured to convert PyTorchJob to Unstructured.
-func ConvertPyTorchJobToUnstructured(job *pyv1.PyTorchJob) (*unstructured.Unstructured, error) {
+func ConvertPyTorchJobToUnstructured(job *pyv1.AmlPyTorchJob) (*unstructured.Unstructured, error) {
 	object, err := runtime.DefaultUnstructuredConverter.ToUnstructured(job)
 	if err != nil {
 		return nil, err
 	}
 	return &unstructured.Unstructured{
-		Object:object,
-	},nil
+		Object: object,
+	}, nil
 }
 
-func GetKey(job *pyv1.PyTorchJob, t *testing.T) string {
+func GetKey(job *pyv1.AmlPyTorchJob, t *testing.T) string {
 	key, err := KeyFunc(job)
 	if err != nil {
 		t.Errorf("Unexpected error getting key for job %v: %v", job.Name, err)
@@ -88,7 +88,7 @@ func GetKey(job *pyv1.PyTorchJob, t *testing.T) string {
 	return key
 }
 
-func CheckCondition(job *pyv1.PyTorchJob, condition common.JobConditionType, reason string) bool {
+func CheckCondition(job *pyv1.AmlPyTorchJob, condition common.JobConditionType, reason string) bool {
 	for _, v := range job.Status.Conditions {
 		if v.Type == condition && v.Status == v1.ConditionTrue && v.Reason == reason {
 			return true

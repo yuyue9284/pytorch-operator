@@ -24,11 +24,11 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/kubernetes/pkg/controller"
 
+	common "github.com/kubeflow/common/job_controller/api/v1"
 	"github.com/kubeflow/pytorch-operator/cmd/pytorch-operator.v1/app/options"
 	pyv1 "github.com/kubeflow/pytorch-operator/pkg/apis/pytorch/v1"
 	jobclientset "github.com/kubeflow/pytorch-operator/pkg/client/clientset/versioned"
 	"github.com/kubeflow/pytorch-operator/pkg/common/util/v1/testutil"
-	common "github.com/kubeflow/common/job_controller/api/v1"
 )
 
 func TestAddPod(t *testing.T) {
@@ -99,7 +99,7 @@ func TestAddPod(t *testing.T) {
 
 func TestClusterSpec(t *testing.T) {
 	type tc struct {
-		job                 *pyv1.PyTorchJob
+		job                 *pyv1.AmlPyTorchJob
 		rt                  pyv1.PyTorchReplicaType
 		index               string
 		totalPods           int32
@@ -167,7 +167,7 @@ func TestClusterSpec(t *testing.T) {
 
 func TestRestartPolicy(t *testing.T) {
 	type tc struct {
-		job                   *pyv1.PyTorchJob
+		job                   *pyv1.AmlPyTorchJob
 		expectedRestartPolicy v1.RestartPolicy
 		expectedType          pyv1.PyTorchReplicaType
 	}
@@ -265,7 +265,7 @@ func TestExitCode(t *testing.T) {
 	}
 	go run(stopCh)
 
-	ctr.updateStatusHandler = func(job *pyv1.PyTorchJob) error {
+	ctr.updateStatusHandler = func(job *pyv1.AmlPyTorchJob) error {
 		return nil
 	}
 

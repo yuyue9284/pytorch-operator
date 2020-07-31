@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"testing"
 
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/tools/cache"
 
@@ -35,7 +35,7 @@ var (
 	controllerKind = pyv1.SchemeGroupVersionKind
 )
 
-func NewBasePod(name string, job *pyv1.PyTorchJob, t *testing.T) *v1.Pod {
+func NewBasePod(name string, job *pyv1.AmlPyTorchJob, t *testing.T) *v1.Pod {
 	return &v1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:            name,
@@ -46,7 +46,7 @@ func NewBasePod(name string, job *pyv1.PyTorchJob, t *testing.T) *v1.Pod {
 	}
 }
 
-func NewPod(job *pyv1.PyTorchJob, typ string, index int, t *testing.T) *v1.Pod {
+func NewPod(job *pyv1.AmlPyTorchJob, typ string, index int, t *testing.T) *v1.Pod {
 	pod := NewBasePod(fmt.Sprintf("%s-%d", typ, index), job, t)
 	pod.Labels[replicaTypeLabel] = typ
 	pod.Labels[replicaIndexLabel] = fmt.Sprintf("%d", index)
@@ -54,7 +54,7 @@ func NewPod(job *pyv1.PyTorchJob, typ string, index int, t *testing.T) *v1.Pod {
 }
 
 // create count pods with the given phase for the given job
-func NewPodList(count int32, status v1.PodPhase, job *pyv1.PyTorchJob, typ string, start int32, t *testing.T) []*v1.Pod {
+func NewPodList(count int32, status v1.PodPhase, job *pyv1.AmlPyTorchJob, typ string, start int32, t *testing.T) []*v1.Pod {
 	pods := []*v1.Pod{}
 	for i := int32(0); i < count; i++ {
 		newPod := NewPod(job, typ, int(start+i), t)
@@ -64,7 +64,7 @@ func NewPodList(count int32, status v1.PodPhase, job *pyv1.PyTorchJob, typ strin
 	return pods
 }
 
-func SetPodsStatuses(podIndexer cache.Indexer, job *pyv1.PyTorchJob, typ string, pendingPods, activePods, succeededPods, failedPods int32, restartCounts []int32, t *testing.T) {
+func SetPodsStatuses(podIndexer cache.Indexer, job *pyv1.AmlPyTorchJob, typ string, pendingPods, activePods, succeededPods, failedPods int32, restartCounts []int32, t *testing.T) {
 	var index int32
 	for _, pod := range NewPodList(pendingPods, v1.PodPending, job, typ, index, t) {
 		if err := podIndexer.Add(pod); err != nil {

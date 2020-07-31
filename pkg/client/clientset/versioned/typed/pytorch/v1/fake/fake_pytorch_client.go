@@ -26,8 +26,8 @@ type FakeAzuremlV1 struct {
 	*testing.Fake
 }
 
-func (c *FakeAzuremlV1) PyTorchJobs(namespace string) v1.PyTorchJobInterface {
-	return &FakePyTorchJobs{c, namespace}
+func (c *FakeAzuremlV1) AmlPyTorchJobs(namespace string) v1.AmlPyTorchJobInterface {
+	return &FakeAmlPyTorchJobs{c, namespace}
 }
 
 // RESTClient returns a RESTClient that is used to communicate

@@ -47,7 +47,7 @@ const (
 // reconcilePods checks and updates pods for each given PyTorchReplicaSpec.
 // It will requeue the job in case of an error while creating/deleting pods.
 func (pc *PyTorchController) reconcilePods(
-	job *pyv1.PyTorchJob,
+	job *pyv1.AmlPyTorchJob,
 	pods []*v1.Pod,
 	rtype pyv1.PyTorchReplicaType,
 	spec *common.ReplicaSpec, rstatus map[string]v1.PodPhase) error {
@@ -137,7 +137,7 @@ func getPodSlices(pods []*v1.Pod, replicas int, logger *log.Entry) [][]*v1.Pod {
 }
 
 // createNewPod creates a new pod for the given index and type.
-func (pc *PyTorchController) createNewPod(job *pyv1.PyTorchJob, rtype pyv1.PyTorchReplicaType, index string, spec *common.ReplicaSpec, masterRole bool) error {
+func (pc *PyTorchController) createNewPod(job *pyv1.AmlPyTorchJob, rtype pyv1.PyTorchReplicaType, index string, spec *common.ReplicaSpec, masterRole bool) error {
 	rt := strings.ToLower(string(rtype))
 	jobKey, err := KeyFunc(job)
 	if err != nil {
@@ -231,7 +231,7 @@ func (pc *PyTorchController) createNewPod(job *pyv1.PyTorchJob, rtype pyv1.PyTor
 	return nil
 }
 
-func setClusterSpec(podTemplateSpec *v1.PodTemplateSpec, job *pyv1.PyTorchJob, totalReplicas int32, index string, rtype pyv1.PyTorchReplicaType) error {
+func setClusterSpec(podTemplateSpec *v1.PodTemplateSpec, job *pyv1.AmlPyTorchJob, totalReplicas int32, index string, rtype pyv1.PyTorchReplicaType) error {
 	rank, err := strconv.Atoi(index)
 	if err != nil {
 		return err
@@ -288,7 +288,7 @@ func setRestartPolicy(podTemplateSpec *v1.PodTemplateSpec, spec *common.ReplicaS
 	}
 }
 
-func (pc *PyTorchController) isNonGangSchedulerSet(job *pyv1.PyTorchJob) bool {
+func (pc *PyTorchController) isNonGangSchedulerSet(job *pyv1.AmlPyTorchJob) bool {
 	for _, spec := range job.Spec.PyTorchReplicaSpecs {
 		if spec.Template.Spec.SchedulerName != "" && spec.Template.Spec.SchedulerName != pc.Config.GangSchedulerName {
 			return true

@@ -24,7 +24,7 @@ import (
 
 type AzuremlV1Interface interface {
 	RESTClient() rest.Interface
-	PyTorchJobsGetter
+	AmlPyTorchJobsGetter
 }
 
 // AzuremlV1Client is used to interact with features provided by the azureml.microsoft.com group.
@@ -32,8 +32,8 @@ type AzuremlV1Client struct {
 	restClient rest.Interface
 }
 
-func (c *AzuremlV1Client) PyTorchJobs(namespace string) PyTorchJobInterface {
-	return newPyTorchJobs(c, namespace)
+func (c *AzuremlV1Client) AmlPyTorchJobs(namespace string) AmlPyTorchJobInterface {
+	return newAmlPyTorchJobs(c, namespace)
 }
 
 // NewForConfig creates a new AzuremlV1Client for the given config.

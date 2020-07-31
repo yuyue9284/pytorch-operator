@@ -16,10 +16,10 @@
 
 package v1
 
-// PyTorchJobListerExpansion allows custom methods to be added to
-// PyTorchJobLister.
-type PyTorchJobListerExpansion interface{}
+// AmlPyTorchJobListerExpansion allows custom methods to be added to
+// AmlPyTorchJobLister.
+type AmlPyTorchJobListerExpansion interface{}
 
-// PyTorchJobNamespaceListerExpansion allows custom methods to be added to
-// PyTorchJobNamespaceLister.
-type PyTorchJobNamespaceListerExpansion interface{}
+// AmlPyTorchJobNamespaceListerExpansion allows custom methods to be added to
+// AmlPyTorchJobNamespaceLister.
+type AmlPyTorchJobNamespaceListerExpansion interface{}

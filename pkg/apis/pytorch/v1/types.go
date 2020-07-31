@@ -21,10 +21,10 @@ import (
 
 // +genclient
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-// +resource:path=pytorchjob
+// +resource:path=amlpytorchjob
 
-// Represents a PyTorchJob resource.
-type PyTorchJob struct {
+// Represents a AmlPyTorchJob resource.
+type AmlPyTorchJob struct {
 	// Standard Kubernetes type metadata.
 	metav1.TypeMeta `json:",inline"`
 
@@ -83,10 +83,10 @@ const (
 )
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-// +resource:path=pytorchjobs
+// +resource:path=amlpytorchjobs
 
-// PyTorchJobList is a list of PyTorchJobs.
-type PyTorchJobList struct {
+// AmlPyTorchJobList is a list of PyTorchJobs.
+type AmlPyTorchJobList struct {
 	// Standard type metadata.
 	metav1.TypeMeta `json:",inline"`
 
@@ -94,5 +94,5 @@ type PyTorchJobList struct {
 	metav1.ListMeta `json:"metadata,omitempty"`
 
 	// List of PyTorchJobs.
-	Items []PyTorchJob `json:"items"`
+	Items []AmlPyTorchJob `json:"items"`
 }

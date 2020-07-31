@@ -18,14 +18,14 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/proto"
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	pyv1 "github.com/kubeflow/pytorch-operator/pkg/apis/pytorch/v1"
 	common "github.com/kubeflow/common/job_controller/api/v1"
+	pyv1 "github.com/kubeflow/pytorch-operator/pkg/apis/pytorch/v1"
 )
 
-func NewPyTorchJobWithCleanPolicy(master, worker int, policy common.CleanPodPolicy) *pyv1.PyTorchJob {
+func NewPyTorchJobWithCleanPolicy(master, worker int, policy common.CleanPodPolicy) *pyv1.AmlPyTorchJob {
 	if master == 1 {
 		job := NewPyTorchJobWithMaster(worker)
 		job.Spec.CleanPodPolicy = &policy
@@ -36,7 +36,7 @@ func NewPyTorchJobWithCleanPolicy(master, worker int, policy common.CleanPodPoli
 	return job
 }
 
-func NewPyTorchJobWithCleanupJobDelay(master, worker int, ttl *int32) *pyv1.PyTorchJob {
+func NewPyTorchJobWithCleanupJobDelay(master, worker int, ttl *int32) *pyv1.AmlPyTorchJob {
 	if master == 1 {
 		job := NewPyTorchJobWithMaster(worker)
 		job.Spec.TTLSecondsAfterFinished = ttl
@@ -51,7 +51,7 @@ func NewPyTorchJobWithCleanupJobDelay(master, worker int, ttl *int32) *pyv1.PyTo
 	return job
 }
 
-func NewPyTorchJobWithActiveDeadlineSeconds(master, worker int, ads *int64) *pyv1.PyTorchJob {
+func NewPyTorchJobWithActiveDeadlineSeconds(master, worker int, ads *int64) *pyv1.AmlPyTorchJob {
 	if master == 1 {
 		job := NewPyTorchJobWithMaster(worker)
 		job.Spec.ActiveDeadlineSeconds = ads
@@ -66,7 +66,7 @@ func NewPyTorchJobWithActiveDeadlineSeconds(master, worker int, ads *int64) *pyv
 	return job
 }
 
-func NewPyTorchJobWithBackoffLimit(master, worker int, backoffLimit *int32) *pyv1.PyTorchJob {
+func NewPyTorchJobWithBackoffLimit(master, worker int, backoffLimit *int32) *pyv1.AmlPyTorchJob {
 	if master == 1 {
 		job := NewPyTorchJobWithMaster(worker)
 		job.Spec.BackoffLimit = backoffLimit
@@ -83,7 +83,7 @@ func NewPyTorchJobWithBackoffLimit(master, worker int, backoffLimit *int32) *pyv
 	return job
 }
 
-func NewPyTorchJobWithMaster(worker int) *pyv1.PyTorchJob {
+func NewPyTorchJobWithMaster(worker int) *pyv1.AmlPyTorchJob {
 	job := NewPyTorchJob(worker)
 	job.Spec.PyTorchReplicaSpecs[pyv1.PyTorchReplicaTypeMaster] = &common.ReplicaSpec{
 		Replicas: proto.Int32(1),
@@ -92,8 +92,8 @@ func NewPyTorchJobWithMaster(worker int) *pyv1.PyTorchJob {
 	return job
 }
 
-func NewPyTorchJob(worker int) *pyv1.PyTorchJob {
-	job := &pyv1.PyTorchJob{
+func NewPyTorchJob(worker int) *pyv1.AmlPyTorchJob {
+	job := &pyv1.AmlPyTorchJob{
 		TypeMeta: metav1.TypeMeta{
 			Kind: pyv1.Kind,
 		},
@@ -105,7 +105,7 @@ func NewPyTorchJob(worker int) *pyv1.PyTorchJob {
 			PyTorchReplicaSpecs: make(map[pyv1.PyTorchReplicaType]*common.ReplicaSpec),
 		},
 	}
-	pyv1.SetObjectDefaults_PyTorchJob(job)
+	pyv1.SetObjectDefaults_AmlPyTorchJob(job)
 
 	if worker > 0 {
 		worker := int32(worker)
@@ -139,7 +139,7 @@ func NewPyTorchReplicaSpecTemplate() v1.PodTemplateSpec {
 	}
 }
 
-func SetPyTorchJobCompletionTime(job *pyv1.PyTorchJob) {
+func SetPyTorchJobCompletionTime(job *pyv1.AmlPyTorchJob) {
 	now := metav1.Time{Time: time.Now()}
 	job.Status.CompletionTime = &now
 }

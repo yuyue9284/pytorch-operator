@@ -18,14 +18,14 @@ import (
 	"fmt"
 	"testing"
 
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/tools/cache"
 
 	pyv1 "github.com/kubeflow/pytorch-operator/pkg/apis/pytorch/v1"
 )
 
-func NewBaseService(name string, job *pyv1.PyTorchJob, t *testing.T) *v1.Service {
+func NewBaseService(name string, job *pyv1.AmlPyTorchJob, t *testing.T) *v1.Service {
 	return &v1.Service{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:            name,
@@ -36,7 +36,7 @@ func NewBaseService(name string, job *pyv1.PyTorchJob, t *testing.T) *v1.Service
 	}
 }
 
-func NewService(job *pyv1.PyTorchJob, typ string, index int, t *testing.T) *v1.Service {
+func NewService(job *pyv1.AmlPyTorchJob, typ string, index int, t *testing.T) *v1.Service {
 	service := NewBaseService(fmt.Sprintf("%s-%d", typ, index), job, t)
 	service.Labels[replicaTypeLabel] = typ
 	service.Labels[replicaIndexLabel] = fmt.Sprintf("%d", index)
@@ -44,7 +44,7 @@ func NewService(job *pyv1.PyTorchJob, typ string, index int, t *testing.T) *v1.S
 }
 
 // NewServiceList creates count pods with the given phase for the given job
-func NewServiceList(count int32, job *pyv1.PyTorchJob, typ string, t *testing.T) []*v1.Service {
+func NewServiceList(count int32, job *pyv1.AmlPyTorchJob, typ string, t *testing.T) []*v1.Service {
 	services := []*v1.Service{}
 	for i := int32(0); i < count; i++ {
 		newService := NewService(job, typ, int(i), t)
@@ -53,7 +53,7 @@ func NewServiceList(count int32, job *pyv1.PyTorchJob, typ string, t *testing.T)
 	return services
 }
 
-func SetServices(serviceIndexer cache.Indexer, job *pyv1.PyTorchJob, typ string, activeWorkerServices int32, t *testing.T) {
+func SetServices(serviceIndexer cache.Indexer, job *pyv1.AmlPyTorchJob, typ string, activeWorkerServices int32, t *testing.T) {
 	for _, service := range NewServiceList(activeWorkerServices, job, typ, t) {
 		if err := serviceIndexer.Add(service); err != nil {
 			t.Errorf("unexpected error when adding service %v", err)

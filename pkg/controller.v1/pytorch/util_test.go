@@ -28,7 +28,7 @@ import (
 func TestGenOwnerReference(t *testing.T) {
 	testName := "test-job"
 	testUID := types.UID("test-UID")
-	job := &pyv1.PyTorchJob{
+	job := &pyv1.AmlPyTorchJob{
 		ObjectMeta: metav1.ObjectMeta{
 			Name: testName,
 			UID:  testUID,
@@ -72,7 +72,7 @@ func TestGenLabels(t *testing.T) {
 func TestConvertPyTorchJobToUnstructured(t *testing.T) {
 	testName := "test-job"
 	testUID := types.UID("test-UID")
-	job := &pyv1.PyTorchJob{
+	job := &pyv1.AmlPyTorchJob{
 		TypeMeta: metav1.TypeMeta{
 			Kind: pyv1.Kind,
 		},

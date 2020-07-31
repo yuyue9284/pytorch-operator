@@ -21,12 +21,12 @@ import (
 	"strings"
 
 	log "github.com/sirupsen/logrus"
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 
-	pyv1 "github.com/kubeflow/pytorch-operator/pkg/apis/pytorch/v1"
 	common "github.com/kubeflow/common/job_controller/api/v1"
+	pyv1 "github.com/kubeflow/pytorch-operator/pkg/apis/pytorch/v1"
 	"github.com/kubeflow/tf-operator/pkg/common/jobcontroller"
 	pylogger "github.com/kubeflow/tf-operator/pkg/logger"
 )
@@ -34,7 +34,7 @@ import (
 // reconcileServices checks and updates services for each given PyTorchReplicaSpec.
 // It will requeue the job in case of an error while creating/deleting services.
 func (pc *PyTorchController) reconcileServices(
-	job *pyv1.PyTorchJob,
+	job *pyv1.AmlPyTorchJob,
 	services []*v1.Service,
 	rtype pyv1.PyTorchReplicaType,
 	spec *common.ReplicaSpec) error {
@@ -92,7 +92,7 @@ func getServiceSlices(services []*v1.Service, replicas int, logger *log.Entry) [
 }
 
 // createNewService creates a new service for the given index and type.
-func (pc *PyTorchController) createNewService(job *pyv1.PyTorchJob, rtype pyv1.PyTorchReplicaType, index string, spec *common.ReplicaSpec) error {
+func (pc *PyTorchController) createNewService(job *pyv1.AmlPyTorchJob, rtype pyv1.PyTorchReplicaType, index string, spec *common.ReplicaSpec) error {
 	jobKey, err := KeyFunc(job)
 	if err != nil {
 		utilruntime.HandleError(fmt.Errorf("couldn't get key for job object %#v: %v", job, err))

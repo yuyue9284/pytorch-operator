@@ -16,4 +16,4 @@
 
 package v1
 
-type PyTorchJobExpansion interface{}
+type AmlPyTorchJobExpansion interface{}

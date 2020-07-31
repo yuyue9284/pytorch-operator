@@ -22,7 +22,7 @@ type UnstructuredInformer struct {
 	informer cache.SharedIndexInformer
 }
 
-func NewPyTorchJobInformer(resource schema.GroupVersionResource, client dynamic.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) informer.PyTorchJobInformer {
+func NewPyTorchJobInformer(resource schema.GroupVersionResource, client dynamic.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) informer.AmlPyTorchJobInformer {
 	return &UnstructuredInformer{
 		informer: newUnstructuredInformer(resource, client, namespace, resyncPeriod, indexers),
 	}
@@ -32,8 +32,8 @@ func (f *UnstructuredInformer) Informer() cache.SharedIndexInformer {
 	return f.informer
 }
 
-func (f *UnstructuredInformer) Lister() lister.PyTorchJobLister {
-	return lister.NewPyTorchJobLister(f.Informer().GetIndexer())
+func (f *UnstructuredInformer) Lister() lister.AmlPyTorchJobLister {
+	return lister.NewAmlPyTorchJobLister(f.Informer().GetIndexer())
 }
 
 // newUnstructuredInformer constructs a new informer for Unstructured type.

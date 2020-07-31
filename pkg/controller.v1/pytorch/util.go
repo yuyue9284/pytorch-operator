@@ -31,7 +31,7 @@ var (
 )
 
 // GetPortFromPyTorchJob gets the port of pytorch container.
-func GetPortFromPyTorchJob(job *pyv1.PyTorchJob, rtype pyv1.PyTorchReplicaType) (int32, error) {
+func GetPortFromPyTorchJob(job *pyv1.AmlPyTorchJob, rtype pyv1.PyTorchReplicaType) (int32, error) {
 	containers := job.Spec.PyTorchReplicaSpecs[rtype].Template.Spec.Containers
 	for _, container := range containers {
 		if container.Name == pyv1.DefaultContainerName {
@@ -51,7 +51,7 @@ type InitContainerParam struct {
 	InitContainerImage string
 }
 
-func ContainMasterSpec(job *pyv1.PyTorchJob) bool {
+func ContainMasterSpec(job *pyv1.AmlPyTorchJob) bool {
 	if _, ok := job.Spec.PyTorchReplicaSpecs[pyv1.PyTorchReplicaTypeMaster]; ok {
 		return true
 	}

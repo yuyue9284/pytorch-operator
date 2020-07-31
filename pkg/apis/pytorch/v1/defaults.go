@@ -67,13 +67,13 @@ func setDefaultReplicas(spec *common.ReplicaSpec) {
 }
 
 // setTypeNamesToCamelCase sets the name of all replica types from any case to correct case.
-func setTypeNamesToCamelCase(job *PyTorchJob) {
+func setTypeNamesToCamelCase(job *AmlPyTorchJob) {
 	setTypeNameToCamelCase(job, PyTorchReplicaTypeMaster)
 	setTypeNameToCamelCase(job, PyTorchReplicaTypeWorker)
 }
 
 // setTypeNameToCamelCase sets the name of the replica type from any case to correct case.
-func setTypeNameToCamelCase(job *PyTorchJob, typ PyTorchReplicaType) {
+func setTypeNameToCamelCase(job *AmlPyTorchJob, typ PyTorchReplicaType) {
 	for t := range job.Spec.PyTorchReplicaSpecs {
 		if strings.EqualFold(string(t), string(typ)) && t != typ {
 			spec := job.Spec.PyTorchReplicaSpecs[t]
@@ -85,7 +85,7 @@ func setTypeNameToCamelCase(job *PyTorchJob, typ PyTorchReplicaType) {
 }
 
 // SetDefaults_PyTorchJob sets any unspecified values to defaults.
-func SetDefaults_PyTorchJob(job *PyTorchJob) {
+func SetDefaults_AmlPyTorchJob(job *AmlPyTorchJob) {
 	// Set default cleanpod policy to None.
 	if job.Spec.CleanPodPolicy == nil {
 		policy := common.CleanPodPolicyNone

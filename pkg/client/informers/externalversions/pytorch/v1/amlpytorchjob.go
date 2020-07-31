@@ -29,59 +29,59 @@ import (
 	cache "k8s.io/client-go/tools/cache"
 )
 
-// PyTorchJobInformer provides access to a shared informer and lister for
-// PyTorchJobs.
-type PyTorchJobInformer interface {
+// AmlPyTorchJobInformer provides access to a shared informer and lister for
+// AmlPyTorchJobs.
+type AmlPyTorchJobInformer interface {
 	Informer() cache.SharedIndexInformer
-	Lister() v1.PyTorchJobLister
+	Lister() v1.AmlPyTorchJobLister
 }
 
-type pyTorchJobInformer struct {
+type amlPyTorchJobInformer struct {
 	factory          internalinterfaces.SharedInformerFactory
 	tweakListOptions internalinterfaces.TweakListOptionsFunc
 	namespace        string
 }
 
-// NewPyTorchJobInformer constructs a new informer for PyTorchJob type.
+// NewAmlPyTorchJobInformer constructs a new informer for AmlPyTorchJob type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewPyTorchJobInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
-	return NewFilteredPyTorchJobInformer(client, namespace, resyncPeriod, indexers, nil)
+func NewAmlPyTorchJobInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
+	return NewFilteredAmlPyTorchJobInformer(client, namespace, resyncPeriod, indexers, nil)
 }
 
-// NewFilteredPyTorchJobInformer constructs a new informer for PyTorchJob type.
+// NewFilteredAmlPyTorchJobInformer constructs a new informer for AmlPyTorchJob type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewFilteredPyTorchJobInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
+func NewFilteredAmlPyTorchJobInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
 	return cache.NewSharedIndexInformer(
 		&cache.ListWatch{
 			ListFunc: func(options metav1.ListOptions) (runtime.Object, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.AzuremlV1().PyTorchJobs(namespace).List(options)
+				return client.AzuremlV1().AmlPyTorchJobs(namespace).List(options)
 			},
 			WatchFunc: func(options metav1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.AzuremlV1().PyTorchJobs(namespace).Watch(options)
+				return client.AzuremlV1().AmlPyTorchJobs(namespace).Watch(options)
 			},
 		},
-		&pytorchv1.PyTorchJob{},
+		&pytorchv1.AmlPyTorchJob{},
 		resyncPeriod,
 		indexers,
 	)
 }
 
-func (f *pyTorchJobInformer) defaultInformer(client versioned.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
-	return NewFilteredPyTorchJobInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
+func (f *amlPyTorchJobInformer) defaultInformer(client versioned.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
+	return NewFilteredAmlPyTorchJobInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
 }
 
-func (f *pyTorchJobInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&pytorchv1.PyTorchJob{}, f.defaultInformer)
+func (f *amlPyTorchJobInformer) Informer() cache.SharedIndexInformer {
+	return f.factory.InformerFor(&pytorchv1.AmlPyTorchJob{}, f.defaultInformer)
 }
 
-func (f *pyTorchJobInformer) Lister() v1.PyTorchJobLister {
-	return v1.NewPyTorchJobLister(f.Informer().GetIndexer())
+func (f *amlPyTorchJobInformer) Lister() v1.AmlPyTorchJobLister {
+	return v1.NewAmlPyTorchJobLister(f.Informer().GetIndexer())
 }

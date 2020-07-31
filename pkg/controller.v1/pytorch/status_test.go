@@ -19,17 +19,17 @@ import (
 	"testing"
 
 	kubebatchclient "github.com/kubernetes-sigs/kube-batch/pkg/client/clientset/versioned"
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	kubeclientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/record"
 	"k8s.io/kubernetes/pkg/controller"
 
+	common "github.com/kubeflow/common/job_controller/api/v1"
 	"github.com/kubeflow/pytorch-operator/cmd/pytorch-operator.v1/app/options"
 	pyv1 "github.com/kubeflow/pytorch-operator/pkg/apis/pytorch/v1"
 	jobclientset "github.com/kubeflow/pytorch-operator/pkg/client/clientset/versioned"
 	"github.com/kubeflow/pytorch-operator/pkg/common/util/v1/testutil"
-	common "github.com/kubeflow/common/job_controller/api/v1"
 )
 
 func TestFailed(t *testing.T) {
@@ -88,7 +88,7 @@ func TestFailed(t *testing.T) {
 func TestStatus(t *testing.T) {
 	type testCase struct {
 		description string
-		job         *pyv1.PyTorchJob
+		job         *pyv1.AmlPyTorchJob
 
 		expectedFailedWorker    int32
 		expectedSucceededWorker int32
@@ -245,7 +245,7 @@ func TestStatus(t *testing.T) {
 		ctr.jobInformerSynced = testutil.AlwaysReady
 		ctr.PodInformerSynced = testutil.AlwaysReady
 		ctr.ServiceInformerSynced = testutil.AlwaysReady
-		ctr.updateStatusHandler = func(job *pyv1.PyTorchJob) error {
+		ctr.updateStatusHandler = func(job *pyv1.AmlPyTorchJob) error {
 			return nil
 		}
 
@@ -284,7 +284,7 @@ func TestStatus(t *testing.T) {
 	}
 }
 
-func setStatusForTest(job *pyv1.PyTorchJob, typ pyv1.PyTorchReplicaType, failed, succeeded, active int32, t *testing.T) {
+func setStatusForTest(job *pyv1.AmlPyTorchJob, typ pyv1.PyTorchReplicaType, failed, succeeded, active int32, t *testing.T) {
 	pod := testutil.NewBasePod("pod", job, t)
 	var i int32
 	for i = 0; i < failed; i++ {

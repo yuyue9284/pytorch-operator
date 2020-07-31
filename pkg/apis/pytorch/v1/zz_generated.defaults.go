@@ -26,18 +26,18 @@ import (
 // Public to allow building arbitrary schemes.
 // All generated defaulters are covering - they call all nested defaulters.
 func RegisterDefaults(scheme *runtime.Scheme) error {
-	scheme.AddTypeDefaultingFunc(&PyTorchJob{}, func(obj interface{}) { SetObjectDefaults_PyTorchJob(obj.(*PyTorchJob)) })
-	scheme.AddTypeDefaultingFunc(&PyTorchJobList{}, func(obj interface{}) { SetObjectDefaults_PyTorchJobList(obj.(*PyTorchJobList)) })
+	scheme.AddTypeDefaultingFunc(&AmlPyTorchJob{}, func(obj interface{}) { SetObjectDefaults_AmlPyTorchJob(obj.(*AmlPyTorchJob)) })
+	scheme.AddTypeDefaultingFunc(&AmlPyTorchJobList{}, func(obj interface{}) { SetObjectDefaults_AmlPyTorchJobList(obj.(*AmlPyTorchJobList)) })
 	return nil
 }
 
-func SetObjectDefaults_PyTorchJob(in *PyTorchJob) {
-	SetDefaults_PyTorchJob(in)
+func SetObjectDefaults_AmlPyTorchJob(in *AmlPyTorchJob) {
+	SetDefaults_AmlPyTorchJob(in)
 }
 
-func SetObjectDefaults_PyTorchJobList(in *PyTorchJobList) {
+func SetObjectDefaults_AmlPyTorchJobList(in *AmlPyTorchJobList) {
 	for i := range in.Items {
 		a := &in.Items[i]
-		SetObjectDefaults_PyTorchJob(a)
+		SetObjectDefaults_AmlPyTorchJob(a)
 	}
 }

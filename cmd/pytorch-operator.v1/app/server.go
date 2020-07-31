@@ -199,7 +199,7 @@ func createClientSets(config *restclientset.Config) (kubeclientset.Interface, ku
 }
 
 func checkCRDExists(clientset jobclientset.Interface, namespace string) bool {
-	_, err := clientset.AzuremlV1().PyTorchJobs(namespace).List(metav1.ListOptions{})
+	_, err := clientset.AzuremlV1().AmlPyTorchJobs(namespace).List(metav1.ListOptions{})
 
 	if err != nil {
 		log.Error(err)

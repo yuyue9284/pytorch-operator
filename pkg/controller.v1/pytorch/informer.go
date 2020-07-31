@@ -31,7 +31,7 @@ var (
 	errFailedMarshal = fmt.Errorf("failed to marshal the object to PyTorchJob")
 )
 
-func NewUnstructuredPyTorchJobInformer(restConfig *restclientset.Config, namespace string) jobinformersv1.PyTorchJobInformer {
+func NewUnstructuredPyTorchJobInformer(restConfig *restclientset.Config, namespace string) jobinformersv1.AmlPyTorchJobInformer {
 	dclient, err := dynamic.NewForConfig(restConfig)
 	if err != nil {
 		panic(err)
@@ -55,16 +55,16 @@ func NewUnstructuredPyTorchJobInformer(restConfig *restclientset.Config, namespa
 }
 
 // NewPyTorchJobInformer returns PyTorchJobInformer from the given factory.
-func (pc *PyTorchController) NewPyTorchJobInformer(jobInformerFactory jobinformers.SharedInformerFactory) jobinformersv1.PyTorchJobInformer {
-	return jobInformerFactory.Azureml().V1().PyTorchJobs()
+func (pc *PyTorchController) NewPyTorchJobInformer(jobInformerFactory jobinformers.SharedInformerFactory) jobinformersv1.AmlPyTorchJobInformer {
+	return jobInformerFactory.Azureml().V1().AmlPyTorchJobs()
 }
 
-func (pc *PyTorchController) getPyTorchJobFromName(namespace, name string) (*pyv1.PyTorchJob, error) {
+func (pc *PyTorchController) getPyTorchJobFromName(namespace, name string) (*pyv1.AmlPyTorchJob, error) {
 	key := fmt.Sprintf("%s/%s", namespace, name)
 	return pc.getPyTorchJobFromKey(key)
 }
 
-func (pc *PyTorchController) getPyTorchJobFromKey(key string) (*pyv1.PyTorchJob, error) {
+func (pc *PyTorchController) getPyTorchJobFromKey(key string) (*pyv1.AmlPyTorchJob, error) {
 	// Check if the key exists.
 	obj, exists, err := pc.jobInformer.GetIndexer().GetByKey(key)
 	logger := pylogger.LoggerForKey(key)
@@ -80,14 +80,14 @@ func (pc *PyTorchController) getPyTorchJobFromKey(key string) (*pyv1.PyTorchJob,
 	return jobFromUnstructured(obj)
 }
 
-func jobFromUnstructured(obj interface{}) (*pyv1.PyTorchJob, error) {
+func jobFromUnstructured(obj interface{}) (*pyv1.AmlPyTorchJob, error) {
 	// Check if the spec is valid.
 	un, ok := obj.(*metav1unstructured.Unstructured)
 	if !ok {
 		log.Errorf("The object in index is not an unstructured; %+v", obj)
 		return nil, errGetFromKey
 	}
-	var job pyv1.PyTorchJob
+	var job pyv1.AmlPyTorchJob
 	err := runtime.DefaultUnstructuredConverter.FromUnstructured(un.Object, &job)
 	logger := pylogger.LoggerForUnstructured(un, pyv1.Kind)
 	if err != nil {
@@ -103,7 +103,7 @@ func jobFromUnstructured(obj interface{}) (*pyv1.PyTorchJob, error) {
 	return &job, nil
 }
 
-func unstructuredFromPyTorchJob(obj interface{}, job *pyv1.PyTorchJob) error {
+func unstructuredFromPyTorchJob(obj interface{}, job *pyv1.AmlPyTorchJob) error {
 	un, ok := obj.(*metav1unstructured.Unstructured)
 	logger := pylogger.LoggerForJob(job)
 	if !ok {

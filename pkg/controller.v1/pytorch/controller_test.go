@@ -210,8 +210,8 @@ func TestNormalPath(t *testing.T) {
 		ctr.ServiceInformerSynced = testutil.AlwaysReady
 		jobIndexer := ctr.jobInformer.GetIndexer()
 
-		var actual *pyv1.PyTorchJob
-		ctr.updateStatusHandler = func(job *pyv1.PyTorchJob) error {
+		var actual *pyv1.AmlPyTorchJob
+		ctr.updateStatusHandler = func(job *pyv1.AmlPyTorchJob) error {
 			actual = job
 			return nil
 		}

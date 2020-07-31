@@ -60,7 +60,7 @@ var (
 )
 
 // updateStatus updates the status of the job.
-func (pc *PyTorchController) updateStatusSingle(job *pyv1.PyTorchJob, rtype pyv1.PyTorchReplicaType, replicas int, restart bool) error {
+func (pc *PyTorchController) updateStatusSingle(job *pyv1.AmlPyTorchJob, rtype pyv1.PyTorchReplicaType, replicas int, restart bool) error {
 	jobKey, err := KeyFunc(job)
 	if err != nil {
 		utilruntime.HandleError(fmt.Errorf("couldn't get key for job object %#v: %v", job, err))
@@ -146,20 +146,20 @@ func (pc *PyTorchController) updateStatusSingle(job *pyv1.PyTorchJob, rtype pyv1
 }
 
 // updatePyTorchJobStatus updates the status of the given PyTorchJob.
-func (pc *PyTorchController) updatePyTorchJobStatus(job *pyv1.PyTorchJob) error {
-	_, err := pc.jobClientSet.AzuremlV1().PyTorchJobs(job.Namespace).UpdateStatus(job)
+func (pc *PyTorchController) updatePyTorchJobStatus(job *pyv1.AmlPyTorchJob) error {
+	_, err := pc.jobClientSet.AzuremlV1().AmlPyTorchJobs(job.Namespace).UpdateStatus(job)
 	return err
 }
 
 // updatePyTorchJobConditions updates the conditions of the given job.
-func updatePyTorchJobConditions(job *pyv1.PyTorchJob, conditionType common.JobConditionType, reason, message string) error {
+func updatePyTorchJobConditions(job *pyv1.AmlPyTorchJob, conditionType common.JobConditionType, reason, message string) error {
 	condition := newCondition(conditionType, reason, message)
 	setCondition(&job.Status, condition)
 	return nil
 }
 
 // initializePyTorchReplicaStatuses initializes the PyTorchReplicaStatuses for replica.
-func initializePyTorchReplicaStatuses(job *pyv1.PyTorchJob, rtype pyv1.PyTorchReplicaType) {
+func initializePyTorchReplicaStatuses(job *pyv1.AmlPyTorchJob, rtype pyv1.PyTorchReplicaType) {
 	commonType := common.ReplicaType(rtype)
 	if job.Status.ReplicaStatuses == nil {
 		job.Status.ReplicaStatuses = make(map[common.ReplicaType]*common.ReplicaStatus)
@@ -169,7 +169,7 @@ func initializePyTorchReplicaStatuses(job *pyv1.PyTorchJob, rtype pyv1.PyTorchRe
 }
 
 // updatePyTorchJobReplicaStatuses updates the PyTorchJobReplicaStatuses according to the pod.
-func updatePyTorchJobReplicaStatuses(job *pyv1.PyTorchJob, rtype pyv1.PyTorchReplicaType, pod *v1.Pod) {
+func updatePyTorchJobReplicaStatuses(job *pyv1.AmlPyTorchJob, rtype pyv1.PyTorchReplicaType, pod *v1.Pod) {
 	commonType := common.ReplicaType(rtype)
 	switch pod.Status.Phase {
 	case v1.PodRunning:

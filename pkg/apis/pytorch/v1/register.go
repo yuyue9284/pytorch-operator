@@ -32,15 +32,15 @@ const (
 	// GroupName is the group name use in this package.
 	GroupName = "azureml.microsoft.com"
 	// Kind is the kind name.
-	Kind = "PyTorchJob"
+	Kind = "AmlPyTorchJob"
 	// GroupVersion is the version.
 	GroupVersion = "v1"
 	// Plural is the Plural for pytorchJob.
-	Plural = "pytorchjobs"
+	Plural = "amlpytorchjobs"
 	// Singular is the singular for pytorchJob.
-	Singular = "pytorchjob"
+	Singular = "amlpytorchjob"
 	// PytorchCRD is the CRD name for PytorchJob.
-	PytorchCRD = "pytorchjobs.azureml.microsoft.com"
+	PytorchCRD = "amlpytorchjobs.azureml.microsoft.com"
 )
 
 var (
@@ -66,8 +66,8 @@ func Resource(resource string) schema.GroupResource {
 // addKnownTypes adds the set of types defined in this package to the supplied scheme.
 func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(SchemeGroupVersion,
-		&PyTorchJob{},
-		&PyTorchJobList{},
+		&AmlPyTorchJob{},
+		&AmlPyTorchJobList{},
 	)
 	metav1.AddToGroupVersion(scheme, SchemeGroupVersion)
 	return nil

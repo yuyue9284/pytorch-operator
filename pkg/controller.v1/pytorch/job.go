@@ -150,7 +150,7 @@ func (pc *PyTorchController) updatePyTorchJob(old, cur interface{}) {
 }
 
 // deletePodsAndServices deletes all the pods and master service.
-func (pc *PyTorchController) deletePodsAndServices(job *pyv1.PyTorchJob, pods []*v1.Pod, services []*v1.Service) error {
+func (pc *PyTorchController) deletePodsAndServices(job *pyv1.AmlPyTorchJob, pods []*v1.Pod, services []*v1.Service) error {
 	if len(pods) == 0 {
 		return nil
 	}
@@ -183,7 +183,7 @@ func (pc *PyTorchController) deletePodsAndServices(job *pyv1.PyTorchJob, pods []
 	return nil
 }
 
-func (pc *PyTorchController) cleanupPyTorchJob(job *pyv1.PyTorchJob) error {
+func (pc *PyTorchController) cleanupPyTorchJob(job *pyv1.AmlPyTorchJob) error {
 	currentTime := time.Now()
 	ttl := job.Spec.TTLSecondsAfterFinished
 	if ttl == nil {
@@ -209,11 +209,11 @@ func (pc *PyTorchController) cleanupPyTorchJob(job *pyv1.PyTorchJob) error {
 }
 
 // deletePyTorchJob deletes the given PyTorchJob.
-func (pc *PyTorchController) deletePyTorchJob(job *pyv1.PyTorchJob) error {
-	return pc.jobClientSet.AzuremlV1().PyTorchJobs(job.Namespace).Delete(job.Name, &metav1.DeleteOptions{})
+func (pc *PyTorchController) deletePyTorchJob(job *pyv1.AmlPyTorchJob) error {
+	return pc.jobClientSet.AzuremlV1().AmlPyTorchJobs(job.Namespace).Delete(job.Name, &metav1.DeleteOptions{})
 }
 
-func getTotalReplicas(job *pyv1.PyTorchJob) int32 {
+func getTotalReplicas(job *pyv1.AmlPyTorchJob) int32 {
 	jobReplicas := int32(0)
 	for _, r := range job.Spec.PyTorchReplicaSpecs {
 		jobReplicas += *r.Replicas
@@ -221,7 +221,7 @@ func getTotalReplicas(job *pyv1.PyTorchJob) int32 {
 	return jobReplicas
 }
 
-func getTotalFailedReplicas(job *pyv1.PyTorchJob) int32 {
+func getTotalFailedReplicas(job *pyv1.AmlPyTorchJob) int32 {
 	totalFailedReplicas := int32(0)
 	for rtype := range job.Status.ReplicaStatuses {
 		totalFailedReplicas += job.Status.ReplicaStatuses[rtype].Failed

@@ -82,17 +82,17 @@ type PyTorchController struct {
 	syncHandler func(string) (bool, error)
 
 	// To allow injection of updateStatus for testing.
-	updateStatusHandler func(job *pyv1.PyTorchJob) error
+	updateStatusHandler func(job *pyv1.AmlPyTorchJob) error
 
 	// To allow injection of deletePyTorchJob for testing.
-	deletePyTorchJobHandler func(job *pyv1.PyTorchJob) error
+	deletePyTorchJobHandler func(job *pyv1.AmlPyTorchJob) error
 
 	// jobInformer is a temporary field for unstructured informer support.
 	jobInformer cache.SharedIndexInformer
 
 	// Listers for PyTorchJob, Pod and Service
 	// jobLister can list/get jobs from the shared informer's store.
-	jobLister joblisters.PyTorchJobLister
+	jobLister joblisters.AmlPyTorchJobLister
 
 	// jobInformerSynced returns true if the job store has been synced at least once.
 	jobInformerSynced cache.InformerSynced
@@ -103,7 +103,7 @@ type PyTorchController struct {
 // NewPyTorchController returns a new PyTorchJob controller.
 func NewPyTorchController(
 	// This variable is for unstructured informer.
-	jobInformer jobinformersv1.PyTorchJobInformer,
+	jobInformer jobinformersv1.AmlPyTorchJobInformer,
 	kubeClientSet kubeclientset.Interface,
 	kubeBatchClientSet kubebatchclient.Interface,
 	jobClientSet jobclientset.Interface,
@@ -333,7 +333,7 @@ func (pc *PyTorchController) syncPyTorchJob(key string) (bool, error) {
 
 // reconcilePyTorchJobs checks and updates replicas for each given PyTorchReplicaSpec.
 // It will requeue the job in case of an error while creating/deleting pods/services.
-func (pc *PyTorchController) reconcilePyTorchJobs(job *pyv1.PyTorchJob) error {
+func (pc *PyTorchController) reconcilePyTorchJobs(job *pyv1.AmlPyTorchJob) error {
 	jobKey, err := KeyFunc(job)
 	if err != nil {
 		utilruntime.HandleError(fmt.Errorf("couldn't get key for pytorch job object %#v: %v", job, err))
@@ -494,7 +494,7 @@ func (pc *PyTorchController) reconcilePyTorchJobs(job *pyv1.PyTorchJob) error {
 // satisfiedExpectations returns true if the required adds/dels for the given job have been observed.
 // Add/del counts are established by the controller at sync time, and updated as controllees are observed by the controller
 // manager.
-func (pc *PyTorchController) satisfiedExpectations(job *pyv1.PyTorchJob) bool {
+func (pc *PyTorchController) satisfiedExpectations(job *pyv1.AmlPyTorchJob) bool {
 	satisfied := false
 	jobKey, err := KeyFunc(job)
 	if err != nil {
@@ -517,7 +517,7 @@ func (pc *PyTorchController) satisfiedExpectations(job *pyv1.PyTorchJob) bool {
 
 // pastBackoffLimit checks if container restartCounts sum exceeds BackoffLimit
 // this method applies only to pods with restartPolicy == OnFailure or Always
-func (pc *PyTorchController) pastBackoffLimit(job *pyv1.PyTorchJob, pods []*v1.Pod) (bool, error) {
+func (pc *PyTorchController) pastBackoffLimit(job *pyv1.AmlPyTorchJob, pods []*v1.Pod) (bool, error) {
 	if job.Spec.BackoffLimit == nil {
 		return false, nil
 	}
@@ -556,7 +556,7 @@ func (pc *PyTorchController) pastBackoffLimit(job *pyv1.PyTorchJob, pods []*v1.P
 }
 
 // pastActiveDeadline checks if job has ActiveDeadlineSeconds field set and if it is exceeded.
-func (pc *PyTorchController) pastActiveDeadline(job *pyv1.PyTorchJob) bool {
+func (pc *PyTorchController) pastActiveDeadline(job *pyv1.AmlPyTorchJob) bool {
 	if job.Spec.ActiveDeadlineSeconds == nil || job.Status.StartTime == nil {
 		return false
 	}
@@ -572,7 +572,7 @@ func (pc *PyTorchController) GetJobFromInformerCache(namespace, name string) (me
 }
 
 func (pc *PyTorchController) GetJobFromAPIClient(namespace, name string) (metav1.Object, error) {
-	return pc.jobClientSet.AzuremlV1().PyTorchJobs(namespace).Get(name, metav1.GetOptions{})
+	return pc.jobClientSet.AzuremlV1().AmlPyTorchJobs(namespace).Get(name, metav1.GetOptions{})
 }
 
 func (pc *PyTorchController) GetAPIGroupVersionKind() schema.GroupVersionKind {

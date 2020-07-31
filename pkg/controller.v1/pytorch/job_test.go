@@ -80,10 +80,10 @@ func TestAddPyTorchJob(t *testing.T) {
 		<-syncChan
 		return true, nil
 	}
-	ctr.updateStatusHandler = func(job *pyv1.PyTorchJob) error {
+	ctr.updateStatusHandler = func(job *pyv1.AmlPyTorchJob) error {
 		return nil
 	}
-	ctr.deletePyTorchJobHandler = func(job *pyv1.PyTorchJob) error {
+	ctr.deletePyTorchJobHandler = func(job *pyv1.AmlPyTorchJob) error {
 		return nil
 	}
 
@@ -145,7 +145,7 @@ func TestCopyLabelsAndAnnotation(t *testing.T) {
 	}
 	go run(stopCh)
 
-	ctr.updateStatusHandler = func(job *pyv1.PyTorchJob) error {
+	ctr.updateStatusHandler = func(job *pyv1.AmlPyTorchJob) error {
 		return nil
 	}
 
@@ -198,7 +198,7 @@ func TestCopyLabelsAndAnnotation(t *testing.T) {
 func TestDeletePodsAndServices(t *testing.T) {
 	type testCase struct {
 		description string
-		job         *pyv1.PyTorchJob
+		job         *pyv1.AmlPyTorchJob
 
 		pendingWorkerPods   int32
 		activeWorkerPods    int32
@@ -334,7 +334,7 @@ func TestDeletePodsAndServices(t *testing.T) {
 		ctr.PodInformerSynced = testutil.AlwaysReady
 		ctr.ServiceInformerSynced = testutil.AlwaysReady
 		jobIndexer := ctr.jobInformer.GetIndexer()
-		ctr.updateStatusHandler = func(job *pyv1.PyTorchJob) error {
+		ctr.updateStatusHandler = func(job *pyv1.AmlPyTorchJob) error {
 			return nil
 		}
 
@@ -380,7 +380,7 @@ func TestDeletePodsAndServices(t *testing.T) {
 func TestCleanupPyTorchJob(t *testing.T) {
 	type testCase struct {
 		description string
-		job         *pyv1.PyTorchJob
+		job         *pyv1.AmlPyTorchJob
 
 		pendingWorkerPods   int32
 		activeWorkerPods    int32
@@ -495,11 +495,11 @@ func TestCleanupPyTorchJob(t *testing.T) {
 		ctr.PodInformerSynced = testutil.AlwaysReady
 		ctr.ServiceInformerSynced = testutil.AlwaysReady
 		jobIndexer := ctr.jobInformer.GetIndexer()
-		ctr.updateStatusHandler = func(job *pyv1.PyTorchJob) error {
+		ctr.updateStatusHandler = func(job *pyv1.AmlPyTorchJob) error {
 			return nil
 		}
 		deleteFinished := false
-		ctr.deletePyTorchJobHandler = func(job *pyv1.PyTorchJob) error {
+		ctr.deletePyTorchJobHandler = func(job *pyv1.AmlPyTorchJob) error {
 			deleteFinished = true
 			return nil
 		}
@@ -551,7 +551,7 @@ func TestCleanupPyTorchJob(t *testing.T) {
 func TestActiveDeadlineSeconds(t *testing.T) {
 	type testCase struct {
 		description string
-		job         *pyv1.PyTorchJob
+		job         *pyv1.AmlPyTorchJob
 
 		pendingWorkerPods   int32
 		activeWorkerPods    int32
@@ -647,7 +647,7 @@ func TestActiveDeadlineSeconds(t *testing.T) {
 		ctr.PodInformerSynced = testutil.AlwaysReady
 		ctr.ServiceInformerSynced = testutil.AlwaysReady
 		jobIndexer := ctr.jobInformer.GetIndexer()
-		ctr.updateStatusHandler = func(job *pyv1.PyTorchJob) error {
+		ctr.updateStatusHandler = func(job *pyv1.AmlPyTorchJob) error {
 			return nil
 		}
 
@@ -694,7 +694,7 @@ func TestActiveDeadlineSeconds(t *testing.T) {
 func TestBackoffForOnFailure(t *testing.T) {
 	type testCase struct {
 		description string
-		job         *pyv1.PyTorchJob
+		job         *pyv1.AmlPyTorchJob
 
 		pendingWorkerPods   int32
 		activeWorkerPods    int32
@@ -775,7 +775,7 @@ func TestBackoffForOnFailure(t *testing.T) {
 		ctr.PodInformerSynced = testutil.AlwaysReady
 		ctr.ServiceInformerSynced = testutil.AlwaysReady
 		jobIndexer := ctr.jobInformer.GetIndexer()
-		ctr.updateStatusHandler = func(job *pyv1.PyTorchJob) error {
+		ctr.updateStatusHandler = func(job *pyv1.AmlPyTorchJob) error {
 			return nil
 		}
 
